@@ -1,0 +1,87 @@
+{% extends "shop/base.html" %}
+{% load humanize %}
+
+{% block title %}Chi Tiết Sản Phẩm - {{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5 animate__animated animate__fadeIn">
+  <div class="row">
+    <!-- Cột hình ảnh sản phẩm -->
+    <div class="col-md-6">
+      <div class="card border-0 shadow-lg animate__animated animate__zoomIn">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}" style="max-height: 500px; object-fit: cover;">
+        {% else %}
+          <img src="/media/products/default.jpg" class="card-img-top img-fluid" alt="Sản phẩm mặc định" style="max-height: 500px; object-fit: cover;">
+        {% endif %}
+      </div>
+    </div>
+    <!-- Cột thông tin sản phẩm -->
+    <div class="col-md-6">
+      <h1 class="display-5 fw-bold animate__animated animate__fadeInDown">{{ product.name }}</h1>
+      <p class="fs-4 text-danger fw-bold animate__animated animate__fadeInDown">💰 {{ product.price|intcomma }} VND</p>
+      {% if product.discount > 0 %}
+        <p class="fs-5 text-success fw-bold animate__animated animate__fadeInDown">Giảm {{ product.discount|intcomma }}%</p>
+      {% endif %}
+      <hr>
+      <p class="lead animate__animated animate__fadeInUp">{{ product.description }}</p>
+      <div class="d-flex flex-wrap gap-3 mt-4">
+        <form method="POST" action="{% url 'shop:add_to_cart' product.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-lg btn-success animate__animated animate__pulse animate__infinite">➕ Thêm vào giỏ hàng</button>
+        </form>
+        <a href="{% url 'shop:product_list' %}" class="btn btn-lg btn-outline-primary animate__animated animate__fadeInUp">⬅️ Quay lại danh sách sản phẩm</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Phần đánh giá sản phẩm (nếu có) -->
+  <section class="mt-5 animate__animated animate__fadeInUp">
+    <h3 class="fw-bold">Đánh giá sản phẩm</h3>
+    <hr>
+    {% if product.reviews.count %}
+      <div class="list-group">
+        {% for review in product.reviews.all %}
+          <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>{{ review.user.username }}</strong>
+              <span class="text-warning">
+                {% for i in "12345"|slice:":review.rating" %}
+                  <i class="bi bi-star-fill"></i>
+                {% endfor %}
+                {% for i in "12345"|slice:"review.rating:" %}
+                  <i class="bi bi-star"></i>
+                {% endfor %}
+              </span>
+            </div>
+            <p>{{ review.comment }}</p>
+            <small class="text-muted">{{ review.created_at|date:"d/m/Y H:i" }}</small>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+    {% endif %}
+    <!-- Form gửi đánh giá mới (nếu người dùng đã đăng nhập) -->
+    {% if user.is_authenticated %}
+      <div class="mt-4">
+        <h4>Gửi đánh giá của bạn</h4>
+        <form method="POST" action="{% url 'shop:add_review' product.id %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="rating" class="form-label">Đánh giá (1-5):</label>
+            <input type="number" name="rating" id="rating" class="form-control" min="1" max="5" required>
+          </div>
+          <div class="mb-3">
+            <label for="comment" class="form-label">Bình luận:</label>
+            <textarea name="comment" id="comment" class="form-control" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+        </form>
+      </div>
+    {% else %}
+      <p class="mt-4">Vui lòng <a href="{% url 'shop:login' %}">đăng nhập</a> để gửi đánh giá.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

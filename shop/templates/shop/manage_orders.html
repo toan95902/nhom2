@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý đơn hàng</title>
+</head>
+<body>
+    <h2>Quản lý đơn hàng</h2>
+    {% if orders %}
+        <ul>
+            {% for order in orders %}
+                <li>Đơn hàng #{{ order.id }} - Tổng tiền: {{ order.total_price|intcomma }} VND - Trạng thái: {{ order.status }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Bạn chưa có đơn hàng nào.</p>
+    {% endif %}
+    <a href="{% url 'product_list' %}">Tiếp tục mua sắm</a>
+</body>
+</html>

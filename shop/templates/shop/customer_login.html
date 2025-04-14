@@ -1,0 +1,26 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+    <h2>🔑 Đăng Nhập Khách Hàng</h2>
+
+    {% if messages %}
+        <ul style="color: red;">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_username">Tài khoản:</label>
+        <input type="text" name="username" id="id_username" required><br>
+
+        <label for="id_password">Mật khẩu:</label>
+        <input type="password" name="password" id="id_password" required><br>
+
+        <button type="submit">Đăng nhập</button>
+    </form>
+
+    <p>Chưa có tài khoản? <a href="{% url 'shop:register' %}">Đăng ký ngay</a></p>
+{% endblock %}

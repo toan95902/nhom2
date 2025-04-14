@@ -1,0 +1,83 @@
+{% extends "shop/base.html" %}
+{% load humanize %}
+
+{% block title %}Thanh Toán - E-Commerce{% endblock %}
+
+{% block extra_head %}
+  <!-- Nếu bạn chưa thêm animate.css vào base.html, hãy thêm ở đây -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5 animate__animated animate__fadeIn">
+  <div class="row">
+    <!-- Cột nhập thông tin khách hàng -->
+    <div class="col-md-6">
+      <div class="card shadow-lg animate__animated animate__slideInLeft">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Thông tin giao hàng</h4>
+        </div>
+        <div class="card-body">
+          {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+          {% endif %}
+          <form method="post" action="{% url 'shop:checkout' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="fullname" class="form-label">Họ và tên</label>
+              <input type="text" id="fullname" name="fullname" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">Số điện thoại</label>
+              <input type="text" id="phone" name="phone" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label">Địa chỉ giao hàng</label>
+              <textarea id="address" name="address" rows="3" class="form-control" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="payment_method" class="form-label">Phương thức thanh toán</label>
+              <select id="payment_method" name="payment_method" class="form-select" required>
+                <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                <option value="momo">Ví MoMo</option>
+                <option value="bank">Chuyển khoản ngân hàng</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg w-100 animate__animated animate__pulse animate__infinite">Xác nhận đặt hàng</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cột tóm tắt đơn hàng -->
+    <div class="col-md-6">
+      <div class="card shadow-lg animate__animated animate__slideInRight">
+        <div class="card-header bg-secondary text-white">
+          <h4 class="mb-0">Tóm tắt đơn hàng</h4>
+        </div>
+        <div class="card-body">
+          {% if cart_items %}
+          <ul class="list-group mb-3">
+            {% for item in cart_items %}
+              <li class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeInUp">
+                <div>
+                  <h6 class="my-0">{{ item.product.name }}</h6>
+                  <small class="text-muted">Số lượng: {{ item.quantity|intcomma }}</small>
+                </div>
+                <span class="text-muted">{{ item.subtotal|intcomma }} VND</span>
+              </li>
+            {% endfor %}
+          </ul>
+          <div class="d-flex justify-content-between">
+            <h5 class="mb-0">Tổng cộng:</h5>
+            <h5 class="mb-0 text-danger">{{ total_price|intcomma }} VND</h5>
+          </div>
+          {% else %}
+            <p class="text-center text-danger">Giỏ hàng của bạn đang trống.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
