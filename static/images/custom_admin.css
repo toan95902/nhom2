@@ -1,0 +1,90 @@
+/* custom_admin.css */
+
+/* Màu nền tổng thể */
+body {
+    background-color: #f7f7f7;
+}
+
+/* Tùy chỉnh header Admin */
+#header, #user-tools {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: #fff;
+    border-bottom: 2px solid #ffe100;
+}
+
+/* Tùy chỉnh tiêu đề trang Admin */
+#content h1, .module h2 {
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Tùy chỉnh thanh menu sidebar (nếu có) */
+#nav-global, .grp-nav-header {
+    background-color: #333;
+}
+
+#nav-global a, .grp-nav-header a {
+    color: #fff;
+    transition: color 0.3s;
+}
+
+#nav-global a:hover, .grp-nav-header a:hover {
+    color: #ffe100;
+}
+
+/* Tùy chỉnh table trong admin */
+.change-list table {
+    background-color: #fff;
+    border-collapse: collapse;
+}
+
+.change-list th, .change-list td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Hiệu ứng hover cho các row */
+.change-list tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* Tùy chỉnh form admin */
+fieldset.module {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Tùy chỉnh nút */
+.button, .submit-row input {
+    background-color: #ff416c;
+    border: none;
+    color: #fff !important;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.button:hover, .submit-row input:hover {
+    background-color: #ff4b2b;
+}
+
+/* Tùy chỉnh các thông báo */
+.messages {
+    background-color: #fff;
+    border: 1px solid #ffe100;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+/* Tùy chỉnh footer admin */
+#footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+}
