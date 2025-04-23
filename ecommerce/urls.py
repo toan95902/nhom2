@@ -7,6 +7,5 @@ urlpatterns = [
     path('', include('shop.urls')),
     path('api/products', api_views.product_list_api),
     path('api/orders', api_views.order_list_api),
-    path("api/", include("shop.urls")),
-    path('grappelli/', include('grappelli.urls')),
+    path("api/", include("shop.urls")),    
 ]
