@@ -4,26 +4,6 @@
 {% block title %}Trang Chủ | Shop Vip{% endblock %}
 
 
-<!-- 🔥 SẢN PHẨM BÁN CHẠY -->
-<section class="container my-5">
-  <h2 class="mb-4 text-center animate__animated animate__fadeInUp">🔥 Sản phẩm bán chạy</h2>
-  <div class="row row-cols-1 row-cols-md-4 g-4">
-    {% for product in best_sellers %}
-      <div class="col animate__animated animate__zoomIn">
-        <div class="card h-100 shadow-sm">
-          <a href="{% url 'shop:product_detail' product.id %}">
-            <img src="{{ product.image.url|default:'/media/products/default.jpg' }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-          </a>
-          <div class="card-body text-center">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text text-danger fw-bold">{{ product.price|intcomma }} VND</p>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-</section>
-
 <!-- 🌟 SẢN PHẨM MỚI -->
 <section class="container my-5">
   <h2 class="mb-4 text-center animate__animated animate__fadeInUp">🌟 Sản phẩm mới</h2>
