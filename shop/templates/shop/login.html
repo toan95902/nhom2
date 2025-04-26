@@ -1,42 +1,15 @@
 {% extends 'shop/base.html' %}
 
-{% block title %}Đăng nhập{% endblock %}
-
 {% block content %}
-<div style="max-width: 400px; margin: 0 auto; padding: 20px; border-radius: 10px; background: #f9f9f9; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-  <h2 style="text-align: center; color: #2c3e50;">🔑 Đăng Nhập</h2>
+    <h2>🔑 Đăng Nhập</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_username">Tài khoản:</label>
+        <input type="text" name="username" id="id_username" required><br>
 
-  {% if messages %}
-    <ul style="color: red; padding-left: 20px;">
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+        <label for="id_password">Mật khẩu:</label>
+        <input type="password" name="password" id="id_password" required><br>
 
-  <form method="post" style="display: flex; flex-direction: column; gap: 15px;">
-    {% csrf_token %}
-    
-    <div>
-      <label for="id_username" style="font-weight: bold;">Tài khoản:</label>
-      <input type="text" name="username" id="id_username" placeholder="Nhập tên đăng nhập..." required
-             style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
-    </div>
-
-    <div>
-      <label for="id_password" style="font-weight: bold;">Mật khẩu:</label>
-      <input type="password" name="password" id="id_password" placeholder="Nhập mật khẩu..." required
-             style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
-    </div>
-
-    <button type="submit"
-            style="padding: 10px; background-color: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer;">
-      Đăng nhập
-    </button>
-  </form>
-
-  <p style="text-align: center; margin-top: 15px;">
-    Chưa có tài khoản? <a href="{% url 'register' %}">Đăng ký ngay</a>.
-  </p>
-</div>
+        <button type="submit">Đăng nhập</button>
+    </form>
 {% endblock %}
