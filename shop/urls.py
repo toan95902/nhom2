@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib import admin
 from .views import (
     home, product_list, product_detail, cart_view, add_to_cart, remove_from_cart,
-    checkout, order_success, customer_login, customer_logout, customer_register, add_review, account, api_products, order_list
+    checkout, order_success, customer_login, customer_logout, customer_register, add_review, account
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -27,10 +27,6 @@ urlpatterns = [
     # Trang Admin
     path('admin/', admin.site.urls),
     path('products/<int:product_id>/add_review/', add_review, name='add_review'),
-    # Tài khoản tích hợp
-    path('account/', account, name='account'),
-    path('api/products', api_products),
-    path("orders/", order_list, name="order_list"),
 ]
 
 if settings.DEBUG:
