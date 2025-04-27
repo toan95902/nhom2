@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib import admin
 from .views import (
     home, product_list, product_detail, cart_view, add_to_cart, remove_from_cart,
-    checkout, order_success, customer_login, customer_logout, customer_register, add_review, account, api_product, order_list
+    checkout, order_success, customer_login, customer_logout, customer_register, add_review, account, api_products, order_list
 )
 from django.conf import settings
 from django.conf.urls.static import static
