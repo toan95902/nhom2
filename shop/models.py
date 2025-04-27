@@ -15,7 +15,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=0)
     description = models.TextField()
     image = models.ImageField(upload_to='products/', blank=True, null=True)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='electronics')  # ✅ Danh mục sản phẩm
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='electronics')
     sold = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     discount = models.DecimalField(max_digits=5, decimal_places=2, default=0)
