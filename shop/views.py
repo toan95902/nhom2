@@ -176,38 +176,3 @@ def account(request):
         return render(request, 'shop/account.html')
     # Nếu chưa đăng nhập, hiển thị giao diện tích hợp đăng nhập và đăng ký
     return render(request, 'shop/account.html')
-
-def api_products(request):
-    products = Product.objects.all()
-    data = [
-        {
-            "id": p.id,
-            "name": p.name,
-            "price": p.price
-        } for p in products
-    ]
-    return JsonResponse(data, safe=False)
-
-def order_list(request):
-    data = [
-        {
-            "id": 1,
-            "customer": "Nguyễn Văn A",
-            "total": 450000,
-            "items": [
-                {"name": "Tai nghe Sony", "quantity": 1},
-                {"name": "Chuột Logitech", "quantity": 1}
-            ],
-            "date": "2025-04-09"
-        },
-        {
-            "id": 2,
-            "customer": "Trần Thị B",
-            "total": 300000,
-            "items": [
-                {"name": "Máy sấy tóc", "quantity": 2}
-            ],
-            "date": "2025-04-08"
-        }
-    ]
-    return JsonResponse(data, safe=False)
