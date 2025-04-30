@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 def home(request):
-    products = Product.objects.all()
+    product = Product.objects.all()
     best_sellers = Product.objects.order_by('-sold')[:6]
     new_products = Product.objects.order_by('-created_at')[:6]
     sale_products = Product.objects.filter(discount__gt=0)[:6]
