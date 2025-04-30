@@ -3,4 +3,4 @@
 <a href="{% url 'shop:home' %}">🔙 Quay lại trang chủ</a>
 {% load humanize %}
 <h2>🎉 Đơn hàng thành công!</h2>
-<p>💰 Tổng tiền: {{ total_price|$ }} VND</p>
+<p>💰 Tổng tiền: {{ total_price|intcomma }} VND</p>
