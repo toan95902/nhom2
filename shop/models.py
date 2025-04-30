@@ -4,6 +4,11 @@ from django.contrib.auth.models import User
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
+        ('electronics', 'Điện - Đồ điện tử'),
+        ('fishing', 'Đồ câu'),
+        ('stationery', 'Đồ dùng học tập'),
+        ('lego', 'Đồ chơi LEGO'),
+        ('furniture', 'Đồ nội thất'),
     ]
 
     name = models.CharField(max_length=255)
