@@ -110,7 +110,7 @@ class OrderAdmin(admin.ModelAdmin):
         return ", ".join([f"{item.product.name} (x{item.quantity})" for item in obj.items.all()])
     get_products.short_description = "Sản phẩm"
 
-# Nếu bạn cần quản lý Cart và CartItem
+# Cart & Iterm
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ('user',)
