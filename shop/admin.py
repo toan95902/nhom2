@@ -6,12 +6,12 @@ import datetime
 
 from .models import Category, Product, Order, OrderItem, Cart, CartItem
 
-# ------------------ Giao diện Admin ------------------
+# Tùy chỉnh giao diện admin
 admin.site.site_header = "Shop Đồ Gia Dụng Admin"
 admin.site.site_title = "Trang quản trị Shop Vip"
 admin.site.index_title = "Quản lý bán hàng"
 
-# ------------------ Bộ lọc tùy chỉnh ------------------
+# --- Bộ lọc tùy chỉnh ---
 class BestSellersFilter(admin.SimpleListFilter):
     title = 'Sản phẩm bán chạy'
     parameter_name = 'best_seller'
@@ -55,22 +55,12 @@ class SaleProductsFilter(admin.SimpleListFilter):
             return queryset.filter(discount=0)
         return queryset
 
-# ------------------ Quản lý sản phẩm ------------------
+# --- Quản lý sản phẩm ---
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = (
-        'thumbnail',
-        'name',
-        'formatted_price',
-        'sold',
-        'discount',
-        'is_on_sale',
-        'is_new',
-        'created_time'
-    )
+    list_display = ('name', 'formatted_price', 'sold', 'discount', 'is_on_sale', 'is_new', 'created_time')
     list_filter = (BestSellersFilter, NewProductsFilter, SaleProductsFilter, 'category')
     search_fields = ('name',)
-    readonly_fields = ('created_time',)
 
     def formatted_price(self, obj):
         return f"{obj.price:,.0f}₫"
@@ -90,19 +80,13 @@ class ProductAdmin(admin.ModelAdmin):
         return localtime(obj.created_at).strftime('%d/%m/%Y %H:%M')
     created_time.short_description = 'Ngày tạo'
 
-    def thumbnail(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="60" height="60" style="object-fit: cover; border-radius: 8px;" />', obj.image.url)
-        return "Không có ảnh"
-    thumbnail.short_description = 'Ảnh'
-
-# ------------------ Quản lý danh mục ------------------
+# --- Quản lý danh mục ---
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
-# ------------------ Quản lý đơn hàng ------------------
+# --- Quản lý đơn hàng ---
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
@@ -110,13 +94,7 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = (
-        'customer_name',
-        'payment_method',
-        'total_formatted',
-        'created_time',
-        'get_products'
-    )
+    list_display = ('customer_name', 'payment_method', 'total_formatted', 'created_time', 'get_products')
     inlines = [OrderItemInline]
     search_fields = ('customer_name',)
 
@@ -129,23 +107,13 @@ class OrderAdmin(admin.ModelAdmin):
     created_time.short_description = 'Ngày tạo'
 
     def get_products(self, obj):
-        return format_html("<br>".join(
-            [f"<b>{item.product.name}</b> (x{item.quantity})" for item in obj.items.all()]
-        ))
+        return ", ".join([f"{item.product.name} (x{item.quantity})" for item in obj.items.all()])
     get_products.short_description = "Sản phẩm"
 
-# ------------------ Quản lý giỏ hàng ------------------
-class CartItemInline(admin.TabularInline):
-    model = CartItem
-    extra = 0
-    readonly_fields = ('product', 'quantity')
-
+# Cart & Iterm
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('user', 'total_items')
+    list_display = ('user',)
     search_fields = ('user__username',)
-    inlines = [CartItemInline]
+    
 
-    def total_items(self, obj):
-        return obj.items.count()
-    total_items.short_description = "Tổng mục"
