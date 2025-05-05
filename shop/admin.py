@@ -58,9 +58,10 @@ class SaleProductsFilter(admin.SimpleListFilter):
 # --- Quản lý sản phẩm ---
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'formatted_price', 'sold', 'discount', 'is_on_sale', 'is_new', 'created_time')
+    list_display = ('thumbnail', 'name', 'formatted_price', 'sold', 'discount', 'is_on_sale', 'is_new', 'created_time')
     list_filter = (BestSellersFilter, NewProductsFilter, SaleProductsFilter, 'category')
     search_fields = ('name',)
+    readonly_fields = ('thumbnail',)
 
     def formatted_price(self, obj):
         return f"{obj.price:,.0f}₫"
@@ -80,6 +81,12 @@ class ProductAdmin(admin.ModelAdmin):
         return localtime(obj.created_at).strftime('%d/%m/%Y %H:%M')
     created_time.short_description = 'Ngày tạo'
 
+    def thumbnail(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="60" height="60" style="object-fit:cover;border-radius:8px;" />', obj.image.url)
+        return "-"
+    thumbnail.short_description = "Ảnh"
+
 # --- Quản lý danh mục ---
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -92,11 +99,33 @@ class OrderItemInline(admin.TabularInline):
     extra = 0
     readonly_fields = ('product', 'quantity', 'price')
 
+class OrderDateFilter(admin.SimpleListFilter):
+    title = 'Ngày tạo'
+    parameter_name = 'created_date'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('today', 'Hôm nay'),
+            ('7days', '7 ngày qua'),
+            ('30days', '30 ngày qua'),
+        )
+
+    def queryset(self, request, queryset):
+        now = timezone.now()
+        if self.value() == 'today':
+            return queryset.filter(created_at__date=now.date())
+        elif self.value() == '7days':
+            return queryset.filter(created_at__gte=now - datetime.timedelta(days=7))
+        elif self.value() == '30days':
+            return queryset.filter(created_at__gte=now - datetime.timedelta(days=30))
+        return queryset
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('customer_name', 'payment_method', 'total_formatted', 'created_time', 'get_products')
     inlines = [OrderItemInline]
     search_fields = ('customer_name',)
+    list_filter = (OrderDateFilter,)
 
     def total_formatted(self, obj):
         return f"{obj.total_price:,.0f}₫"
@@ -107,13 +136,16 @@ class OrderAdmin(admin.ModelAdmin):
     created_time.short_description = 'Ngày tạo'
 
     def get_products(self, obj):
-        return ", ".join([f"{item.product.name} (x{item.quantity})" for item in obj.items.all()])
+        return format_html("<ul style='padding-left:20px'>{}</ul>", "".join([
+            f"<li>{item.product.name} <strong>(x{item.quantity})</strong></li>"
+            for item in obj.items.all()
+        ]))
     get_products.short_description = "Sản phẩm"
 
-# Cart & Iterm
+# --- Quản lý giỏ hàng ---
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ('user',)
     search_fields = ('user__username',)
-    
 
+# (Có thể thêm CartItemAdmin nếu cần)
